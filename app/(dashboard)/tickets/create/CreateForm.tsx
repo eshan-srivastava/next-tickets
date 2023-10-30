@@ -23,6 +23,7 @@ export default function CreateForm() {
             user_email:"xyz@abcsupport.com"
         }
 
+        //update db.json with the new ticket data
         const res = await fetch('http:localhost:4001/tickets', {
             method: "POST",
             headers: {"Content-Type": "application/json"},

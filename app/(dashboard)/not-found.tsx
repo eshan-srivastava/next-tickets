@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+//does not get picked up when using route groups
+
 export default function NotFound() {
     return(
         <main className="text-center">

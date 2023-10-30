@@ -9,6 +9,16 @@ interface Ticket {
 }
 export const dynamicParams = true;
 
+//exporting dynamic metadata for layout to use as metadata
+export async function generateMetadata({ params: {id}} : {params: {id: string}}){
+    const ticketres = await fetch(`http://localhost:4001/tickets/${id}`);
+    const ticket = await ticketres.json();
+    
+    return {
+        title: `Ticket | ${ticket.title}`,
+    }
+};
+
 export async function generateStaticParams() {
     const res = await fetch('http://localhost:4001/tickets');
 
@@ -22,7 +32,7 @@ export async function generateStaticParams() {
 }
 const getTicket = async (id: string) => {
     //imitate delay
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
     const res = await fetch('http://localhost:4001/tickets/' + id, {
         next: {

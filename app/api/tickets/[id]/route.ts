@@ -12,13 +12,17 @@ import { request } from "http";
 export const dynamic = "force-dynamic"
 
 export async function GET(_: Request, { params }: {params: {id: string}}){
-    
-    
     const res = await fetch(`http://localhost:4001/tickets/${params.id}`)
 
-    const tickets = await res.json();
+    const ticket = await res.json();
 
-    return NextResponse.json(tickets, {
+    //validating ticket
+    if (!res.ok){
+        return NextResponse.json({error: 'Cannot find the ticker'},
+        {status: 404})
+    }
+
+    return NextResponse.json(ticket, {
         status: 200,
     });
     //this is currently a static route handler (Because it is a simple GET handler) so if changes are made to dB while

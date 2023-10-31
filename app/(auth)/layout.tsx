@@ -2,9 +2,10 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { Database } from "@/database.types";
 
 export default async function AuthLayout ({children} : {children: React.ReactNode}) {
-    const supabase = createServerComponentClient({cookies});
+    const supabase = createServerComponentClient<Database>({cookies});
     const { data } = await supabase.auth.getSession();
 
     if (!data){

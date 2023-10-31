@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { request } from "http";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { Database } from "@/database.types";
 
 export const dynamic = "force-dynamic"
 
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
     const ticket = await request.json();
 
     //get supabase instance
-    const supabase = createRouteHandlerClient({cookies});
+    const supabase = createRouteHandlerClient<Database>({cookies});
 
     //get current session
     const { data: { session } } = await supabase.auth.getSession();

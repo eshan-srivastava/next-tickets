@@ -16,24 +16,29 @@ export default function CreateForm() {
         e.preventDefault(); //prevent form from reloading
         setIsLoading(true);
 
-        const newTicket = {
-            title, 
-            body, 
-            priority, 
-            user_email:"xyz@abcsupport.com"
-        }
+        const newTicket = {title, body,priority}; //handling email dynamically
 
-        //update db.json with the new ticket data
-        const res = await fetch('http:localhost:4001/tickets', {
+        //update db.json with the new ticket data for testing
+        // const res = await fetch('http:localhost:4001/tickets', {
+        
+        const res = await fetch('http:localhost:3001/api/tickets', {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(newTicket)
         })
 
-        if (res.status === 201){
-            router.refresh(); //refresh page to refetch tickets and re-render main
-            router.push('/tickets')
+        const json = await res.json();
+        if (json.error){
+            console.log(json.error.message)
         }
+        else if (json.data){
+            router.refresh();
+            router.push('/tickets');
+        }
+        // if (res.status === 201){
+        //     router.refresh(); //refresh page to refetch tickets and re-render main
+        //     router.push('/tickets')
+        // } //Used if json API server is being used instead of supabase
     }
 
     return(

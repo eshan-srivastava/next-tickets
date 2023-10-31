@@ -6,9 +6,39 @@
 
 import { NextResponse } from "next/server";
 import { request } from "http";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic"
 
+export async function POST(request: Request) {
+    const ticket = await request.json();
+
+    //get supabase instance
+    const supabase = createRouteHandlerClient({cookies});
+
+    //get current session
+    const { data: { session } } = await supabase.auth.getSession();
+
+    //insert data into table
+    const { data, error } = await supabase.from('tickets')
+    .insert({
+        ...ticket,
+        user_email: session?.user.email
+    })
+    .select()
+    .single()
+    //single returns the result as a single object instead of an array because return as array is default behaviour
+
+    return NextResponse.json({data, error});
+}
+
+
+
+
+
+/*
+LEGACY ROUTES for json API server usage
 export async function GET(){
     const res = await fetch('http://localhost:4001/tickets')
 
@@ -36,3 +66,5 @@ export async function POST(request: Request) {
         status: 201,
     })
 }
+
+*/
